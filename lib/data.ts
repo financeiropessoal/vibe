@@ -1,0 +1,21 @@
+export const events = [
+ {id:'orla',name:'Meia Maratona da Orla',city:'Florianópolis, SC',date:'2026-11-15',time:'06:00',place:'Beira-Mar Norte',image:'/images/orla.jpg',distances:[5,10,21],base:100,tag:'À beira-mar',month:'NOV',day:'15',description:'O mar ao seu lado e um novo desafio à frente. Um percurso pela orla, com largada ao amanhecer e distâncias para diferentes momentos da sua jornada.',color:'#087d82'},
+ {id:'parque',name:'Circuito Vibe no Parque',city:'São Paulo, SP',date:'2026-11-22',time:'07:00',place:'Parque do Ibirapuera',image:'/images/parque.jpg',distances:[5,7,10],base:85,tag:'Para todos os ritmos',month:'NOV',day:'22',description:'Uma manhã para respirar fundo, encontrar outros corredores e celebrar cada quilômetro. Escolha sua distância e viva o percurso no seu ritmo.',color:'#3e8064'},
+ {id:'cidade',name:'Maratona Entre Pontes',city:'Recife, PE',date:'2026-12-06',time:'05:30',place:'Marco Zero',image:'/images/cidade.jpg',distances:[5,15,21,42],base:120,tag:'Um novo desafio',month:'DEZ',day:'06',description:'Pontes, ruas e histórias se encontram neste desafio urbano. Da primeira prova à maratona, encontre a distância que combina com você.',color:'#3c6593'}
+];
+export type RaceEvent=typeof events[number];
+export const products=[{id:'gel',name:'Kit energia · 5 géis',store:'Ponto do Atleta',price:65,later:85,stock:30,description:'Cinco sachês de gel de carboidrato. Oferta ilustrativa.',address:'Rua das Palmeiras, 120 · Centro',hours:'Segunda a sexta, das 9h às 18h'},{id:'recovery',name:'Kit recuperação',store:'Ponto do Atleta',price:150,later:200,stock:15,description:'Suplemento pós-treino e coqueteleira. Oferta ilustrativa.',address:'Rua das Palmeiras, 120 · Centro',hours:'Segunda a sexta, das 9h às 18h'}];
+export const initialResults=[{id:'r1',name:'Corrida do Amanhecer',date:'2026-03-08',distance:5,ms:1920000,source:'Exemplo',city:'Florianópolis',link:''},{id:'r2',name:'Circuito do Parque',date:'2026-05-17',distance:5,ms:1805000,source:'Exemplo',city:'Florianópolis',link:''},{id:'r3',name:'Desafio de Inverno',date:'2026-07-12',distance:5,ms:1698000,source:'Exemplo',city:'Florianópolis',link:''},{id:'r4',name:'Corrida da Primavera',date:'2026-09-20',distance:5,ms:1612450,source:'Exemplo',city:'Florianópolis',link:''}];
+export type Result=typeof initialResults[number];
+export type Athlete={name:string;email:string;distance:number;size:string};
+export type Order={id:string;eventId:string;athletes:Athlete[];productIds:string[];payment:string;total:number;fee:number;createdAt:string;status:string;delivered:boolean;shirtDelivered:boolean;kitDelivered:boolean;deliveries?:{shirt:boolean;kit:boolean}[];deliveredAt?:string;cancelRequested?:boolean};
+export const defaultSettings={pix:{mode:'percent',value:10},card:{mode:'percent',value:15},installments:{mode:'percent',value:15},setup:300,stores:true,rent:2000,maxInstallments:6,storeCost:7,lotEnd:'2026-10-31',lotQuantity:500,storeName:'Ponto do Atleta',storeAddress:'Rua das Palmeiras, 120 · Centro',storePhone:'',storeHours:'Segunda a sexta, das 9h às 18h'};
+export type Settings=typeof defaultSettings;
+export type Workspace={results:Result[];orders:Order[];favorites:string[];settings:Settings;invites:{id:string;name:string;role:string;email:string;createdAt:string}[]};
+export const initialWorkspace:Workspace={results:[],orders:[],favorites:[],settings:defaultSettings,invites:[]};
+export const money=(n:number)=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(n);
+export const dateLabel=(d:string)=>new Date(d+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'});
+export const timeLabel=(ms:number)=>{const s=Math.floor(ms/1000);return `${Math.floor(s/3600).toString().padStart(2,'0')}:${Math.floor(s/60)%60<10?'0':''}${Math.floor(s/60)%60}:${(s%60).toString().padStart(2,'0')}.${(ms%1000).toString().padStart(3,'0')}`};
+export const pace=(ms:number,km:number)=>{const s=Math.round(ms/1000/km);return `${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`};
+export const racePrice=(e:RaceEvent,d:number)=>e.base+(d>=42?90:d>=21?40:d>=15?30:d>=10?20:d>=7?10:0);
+export const feeFor=(price:number,payment:string,s:Settings)=>{const f=payment==='pix'?s.pix:payment==='installments'?s.installments:s.card;return Math.round((f.mode==='percent'?price*f.value/100:f.value)*100)/100};
